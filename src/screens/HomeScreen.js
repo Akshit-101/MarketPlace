@@ -1,9 +1,8 @@
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Header from '../components/Header';
 import ProductCard from '../components/ProductCard';
 
-// Static Data Array
 const MOCK_DATA = [
   {
     id: '1',
@@ -31,16 +30,24 @@ const MOCK_DATA = [
   },
 ];
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header />
+
       <FlatList
         data={MOCK_DATA}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ProductCard item={item} />}
         contentContainerStyle={styles.listPadding}
       />
+
+      <TouchableOpacity 
+        style={styles.fab} 
+        onPress={() => navigation.navigate('AddProduct')}
+      >
+        <Text style={styles.fabText}>+</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -51,7 +58,31 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
   },
   listPadding: {
-    paddingBottom: 20,
+    paddingBottom: 100, 
+  },
+  fab: {
+    position: 'absolute',
+    right: 25,
+    bottom: 30,
+    backgroundColor: '#439A73', 
+    width: 65,
+    height: 65,
+    borderRadius: 32.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // Shadow for Android
+    elevation: 8,
+    // Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+  },
+  fabText: {
+    color: 'white',
+    fontSize: 35,
+    fontWeight: '300', 
+    marginTop: -4,   
   },
 });
 
