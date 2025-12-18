@@ -1,81 +1,105 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { COLORS, SIZES } from '../constants/theme';
 
-// Inside ProductCard.js
 const ProductCard = ({ item }) => {
   return (
-    <View style={styles.card}>
-      {/* Changed source to item.image */}
-      <Image 
-        source={{ uri: item.image }} 
-        style={styles.image} 
-        resizeMode="cover" // Ensures image fills the area nicely
-      />
+    <TouchableOpacity activeOpacity={0.8} style={styles.card}>
+      <Image source={{ uri: item.image }} style={styles.image} />
       
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.price}>{item.price}</Text>
-        <Text style={styles.vendor}>by {item.vendor}</Text>
+        <View style={styles.headerRow}>
+          <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+          <Text style={styles.price}>{item.price}</Text>
+        </View>
         
-        <View style={styles.tag}>
-          <Text style={styles.tagText}>{item.category}</Text>
+        <Text style={styles.vendor}>By {item.vendor}</Text>
+        
+        <View style={styles.footer}>
+          <View style={styles.categoryBadge}>
+            <Text style={styles.categoryText}>{item.category}</Text>
+          </View>
+          <TouchableOpacity style={styles.buyButton}>
+            <Text style={styles.buyButtonText}>View</Text>
+          </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    marginHorizontal: 15,
+    backgroundColor: COLORS.white,
+    borderRadius: SIZES.radius,
     marginBottom: 20,
-    overflow: 'hidden',
-    // Shadow for iOS
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    // Shadow for Android
-    elevation: 3,
+    marginHorizontal: 15,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+      },
+      android: { elevation: 5 },
+    }),
   },
   image: {
     width: '100%',
-    height: 200,
-    backgroundColor: '#f0f0f0',
+    height: 220,
+    borderTopLeftRadius: SIZES.radius,
+    borderTopRightRadius: SIZES.radius,
   },
-  infoContainer: {
-    padding: 15,
+  infoContainer: { padding: 15 },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 5,
   },
   title: {
     fontSize: 18,
-    fontWeight: '700',
-    color: '#000',
+    fontWeight: 'bold',
+    color: COLORS.text,
+    flex: 1,
+    marginRight: 10,
   },
   price: {
-    fontSize: 16,
-    color: '#2e7d32', // Greenish color like the reference
-    fontWeight: '600',
-    marginTop: 4,
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.primary,
   },
   vendor: {
     fontSize: 14,
-    color: '#666',
-    marginTop: 2,
+    color: COLORS.textLight,
+    marginBottom: 12,
   },
-  tag: {
-    backgroundColor: '#f0f0f0',
-    paddingHorizontal: 10,
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: COLORS.border,
+    paddingTop: 12,
+  },
+  categoryBadge: {
+    backgroundColor: '#E8F5E9',
+    paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 8,
-    alignSelf: 'flex-start',
-    marginTop: 10,
+    borderRadius: 20,
   },
-  tagText: {
+  categoryText: {
+    color: COLORS.primary,
     fontSize: 12,
-    color: '#444',
+    fontWeight: '600',
   },
+  buyButton: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 15,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  buyButtonText: { color: COLORS.white, fontWeight: '600' },
 });
 
 export default ProductCard;
